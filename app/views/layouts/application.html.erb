@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>AwesomeAnswers</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <a href="/">Home</a>
+    |
+    <!-- <a href="/contact">Contact Us</a> -->
+    <!-- <a href="<%= contact_path %>">Contact Us</a> -->
+    <!-- helper from /rails/info/routes -->
+    <!-- it's better to use path than hard coding url(/contact) since it might
+    change latter -->
+    <!-- use url helper for extener case inspect your link! -->
+    <%= link_to('Contect Us', contact_path) %>
+
+    <hr>
+    <%= yield %>
+  </body>
+</html>

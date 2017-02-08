@@ -1,0 +1,10 @@
+<h1>Contact Us</h1>
+
+<%# form_tag will generate a form with POST as its `method` the first argument
+    will be the URL `action` which the form will submit to. %>
+<%= form_tag contact_submit_path do %>
+  <%= text_field_tag :name %>
+  <%= email_field_tag :email %>
+  <%= text_area_tag :message %>
+  <%= submit_tag 'Contact Us' %>
+<% end %>

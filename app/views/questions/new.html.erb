@@ -16,6 +16,7 @@
 <%# <input name='hi[abc]'> => {'hi' => {'abc' => '123'}} %>
 <%# { title: "what is 0.2 + 0.1", body: "hard question" } this looks the same as
     q = Question.create({ title: "what is 0.2 + 0.1", body: "hard question" })%>
+<p><%= @question.errors.full_messages.join(', ') %></p>
 <%= form_for @question do |f| %>
   <div>
     <%= f.label :title %>

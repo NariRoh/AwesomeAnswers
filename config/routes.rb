@@ -11,10 +11,11 @@ Rails.application.routes.draw do
   # that looks like its own language
 
   get '/contact' => 'welcome#contact_us'
-
   post '/contact_submit' => 'welcome#contact_submit'
 
-  # get '/about' => 'welcome#about_us' as: :aboutus
+  get '/about' => 'welcome#about_us', as: :aboutus
 
+  get '/questions/new' => 'questions#new', as: :new_question
+  post '/questions' => 'questions#create', as: :questions
 
 end

@@ -15,12 +15,17 @@ Rails.application.routes.draw do
 
   get '/about' => 'welcome#about_us', as: :aboutus
 
-  # as helper only cares about generating URL not HTTP verbs
-  get '/questions/new' => 'questions#new', as: :new_question
-  post '/questions'    => 'questions#create', as: :questions
-  # here /:id can be anything so /new shoul be upper than /:id 
-  get '/questions/:id' => 'questions#show', as: :question
-  get '/questions'     => 'questions#index'
+  # resources :questions, only: [:create, :update]
+  # resources :questions, except: [:index]
   # resources :questions
+  # as helper only cares about generating URL not HTTP verbs
+  get    '/questions/new'      => 'questions#new', as: :new_question
+  post   '/questions'          => 'questions#create', as: :questions
+  # here /:id can be anything so /new shoul be upper than /:id
+  get    '/questions/:id'      => 'questions#show', as: :question
+  get    '/questions'          => 'questions#index'
+  get    '/questions/:id/edit' => 'questions#edit', as: :edit_question
+  patch  '/questions/:id'      => 'questions#update'
+  delete '/questions/:id'     => 'questions#destroy'
 
 end

@@ -32,6 +32,10 @@ class Question < ApplicationRecord
     where("title ILIKE ? or body ILIKE ?", "%#{query}%", "%#{query}%")
   end
 
+# 🖕 class method and when self used inside method like 👇 self refers
+# instance of the class (the object you create!)
+# methods under private area can be only called inside class 
+
   private
 
   def set_view_count

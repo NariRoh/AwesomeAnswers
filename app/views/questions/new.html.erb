@@ -5,7 +5,11 @@
     given an ActiveRecord object as its first argument. If the object is not
     persisted then the form will use POST request and the URL will be the create
     action path which is this case `questions_path` (not persisted means not saved
-    in the database) q.persisted? %>
+    in the database) q.persisted?
+    Rails will check for you if the given object has been saved yet. If it's a 
+    new object, it will send the form to your #create action. If the object has
+    been saved before, so we know that we're editing an existing object, it will
+    send the object to your #update action instead. %>
 <%# form_for doesn't care where to send your form as long as it's given the path
     so? routes.rb get '/blahblasas' => 'home#index', as: :questions <- this path
     We also have access to the `f` object which eases creating fields for the
@@ -28,3 +32,16 @@
   </div>
   <%= f.submit %>
 <% end %>
+
+<%#
+    * WITH form_tag helper *
+
+    Parameters: {"utf8"=>"✓", "authenticity_token"=>"0kSyQdE/mQmqPArrk0QUrLexErhON161EePWKLVoNwV7vHf1BCnAHtHXy2oFXNkZF5jzRtHHKJnwq4z1cQhn2g==",
+    "name"=>"nari", "email"=>"nari.roh@gamalksdfjl", "message"=>"ajlkdfjlajsdkf", "commit"=>"Contact Us"}
+
+    * WITH form_for helper *
+
+    Parameters: {"utf8"=>"✓", "authenticity_token"=>"2zqPD8KUw7xUKAW6C3u9E85WU3j4n7Xx8cFIhTUc9ZO3BRqwrLd1m60dqIQPGSD9I0nF0TbfJJY4ptxdzZlitg==",
+    "question"=>{"title"=>"this is a test for", "body"=>"form_for helper"}, "commit"=>"Create Question"}
+
+%>

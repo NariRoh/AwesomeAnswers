@@ -28,13 +28,15 @@ class Question < ApplicationRecord
 
   # define a class method by adding self. in front of a method name
   # This method will be calleable on the class itself (i.e. Question.search("thing"))
+  # needed to keep this class method here other than making it private cause
+  # controller will called this method when it's requested.
   def self.search(query)
     where("title ILIKE ? or body ILIKE ?", "%#{query}%", "%#{query}%")
   end
 
 # 🖕 class method and when self used inside method like 👇 self refers
 # instance of the class (the object you create!)
-# methods under private area can be only called inside class 
+# methods under private area can be only called inside class
 
   private
 

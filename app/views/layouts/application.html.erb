@@ -20,8 +20,8 @@
     <%= link_to('All Questions', questions_path) %>
     |
     <%= link_to('Contect Us', contact_path) %>
-
     <hr>
+    <%= notice || alert %>
     <%= yield %>
   </body>
 </html>

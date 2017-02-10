@@ -1,47 +1,11 @@
 <h1>New Question</h1>
 
-<%# form_for is a Rails helper (built-in) generate a form to create or updated_at
-    a record in the database through a controller. `form_for` expects to be
-    given an ActiveRecord object as its first argument. If the object is not
-    persisted then the form will use POST request and the URL will be the create
-    action path which is this case `questions_path` (not persisted means not saved
-    in the database) q.persisted?
-    Rails will check for you if the given object has been saved yet. If it's a 
-    new object, it will send the form to your #create action. If the object has
-    been saved before, so we know that we're editing an existing object, it will
-    send the object to your #update action instead. %>
-<%# form_for doesn't care where to send your form as long as it's given the path
-    so? routes.rb get '/blahblasas' => 'home#index', as: :questions <- this path
-    We also have access to the `f` object which eases creating fields for the
-    form. The field will be automatically pre-populated with any data set in the
-    object (such as title / body). It will also automatically set special `name`
-    attributes to the generated fields. %>
-<%# <input name='abc' (input is 123) => {'abc'} => '123' %>
-<%# <input name='hi[abc]'> => {'hi' => {'abc' => '123'}} %>
-<%# { title: "what is 0.2 + 0.1", body: "hard question" } this looks the same as
-    q = Question.create({ title: "what is 0.2 + 0.1", body: "hard question" })%>
-<p><%= @question.errors.full_messages.join(', ') %></p>
-<%= form_for @question do |f| %>
-  <div>
-    <%= f.label :title %>
-    <%= f.text_field :title %>
-  </div>
-  <div>
-    <%= f.label :body %>
-    <%= f.text_field :body %>
-  </div>
-  <%= f.submit %>
-<% end %>
-
-<%#
-    * WITH form_tag helper *
-
-    Parameters: {"utf8"=>"✓", "authenticity_token"=>"0kSyQdE/mQmqPArrk0QUrLexErhON161EePWKLVoNwV7vHf1BCnAHtHXy2oFXNkZF5jzRtHHKJnwq4z1cQhn2g==",
-    "name"=>"nari", "email"=>"nari.roh@gamalksdfjl", "message"=>"ajlkdfjlajsdkf", "commit"=>"Contact Us"}
-
-    * WITH form_for helper *
-
-    Parameters: {"utf8"=>"✓", "authenticity_token"=>"2zqPD8KUw7xUKAW6C3u9E85WU3j4n7Xx8cFIhTUc9ZO3BRqwrLd1m60dqIQPGSD9I0nF0TbfJJY4ptxdzZlitg==",
-    "question"=>{"title"=>"this is a test for", "body"=>"form_for helper"}, "commit"=>"Create Question"}
-
-%>
+<%# this will render a partial name `_form.html.erb` that is within the same
+    folder as this file (so it will look for it in `app/views/questions`). If
+    the partial is located in another folder then you will have to put the full
+    messages path such as `render '/answers/form'`. All partials should start
+    with `_`. Partials will have access to instance variables that are availalbe
+    in this template. In this case, the `_form` partial will have access to
+    `@question`
+    %>
+<%= render 'form' %>

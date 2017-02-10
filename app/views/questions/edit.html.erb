@@ -1,18 +1,8 @@
 <h1>Edit Question</h1>
 <%# `form_for` will look at the first arguemnt (in this @question) if @question
     is persisted which is the case here as we're editing an existing question,
-    `form_for` will use  question_path(@question) (:same as show) for its action and it will
-    use `PATCH` for its request by including a hidden field with name `_method`
-    and value `PATCH` to mimick a PATCH request %>
-<p><%= @question.errors.full_messages.join(', ') %></p>
-<%= form_for @question do |f| %>
-  <div>
-    <%= f.label :title %>
-    <%= f.text_field :title %>
-  </div>
-  <div>
-    <%= f.label :body %>
-    <%= f.text_field :body %>
-  </div>
-  <%= f.submit %>
-<% end %>
+    `form_for` will use  question_path(@question) (:same as show) for its action
+    and it will use `PATCH` for its request by including a hidden field with
+    name `_method` and value `PATCH` to mimick a PATCH request %>
+
+<%= render 'form' %>

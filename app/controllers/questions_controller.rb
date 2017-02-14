@@ -8,7 +8,7 @@ class QuestionsController < ApplicationController
   # it's like defining middle ware
   # before_action(:find_question, { only: [:show, :edit, :destroy, :update] })
   # using string for method name here 🖕 instead of symbol: when you care about
-  # value and you will change the method? 
+  # value and you will change the method?
   before_action :find_question, only: [:show, :edit, :destroy, :update]
 
   def new
@@ -46,6 +46,8 @@ class QuestionsController < ApplicationController
       # use session but it will stay even if user click other pages
       # session[:message] = 'Question created successfully'
       # Use Rails built in hepler method flash
+      # this designed to use with redirect_to. It works with next cycle. skip
+      # at the next cycle then works for the next one
       flash[:notice] = 'Question created successfully'
       redirect_to question_path(@question)
     else

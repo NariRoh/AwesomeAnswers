@@ -1,4 +1,23 @@
 class Question < ApplicationRecord
+
+  # this sets up one-to-many association between the question and the answer
+  # in this case a question has many answers (note that to set a one-to-many
+  # association you will have to pluralize `answer` - Rails convention)
+  # we will have many handy method to helps us query associated records.
+  # for instance we can do:
+  # q = Question.last
+  # answers = q.answers
+  # the line above will fetch all the answers associated with question: q
+  # we do this because Rails doesn't know if you want one to one or one to many
+  # It's highly recommended that you add the `dependent` option to the
+  # association which tells Rails what to do when you delete a question that
+  # has answers associated with it, the most popular options are:
+  # destroy: which will delete all associated answers before deleting the
+  #          question
+  # nullify: which will update all the `question_id` fields on the associated
+  #          answers to be come `NULL` before deleting the question
+  has_many :answers, dependent: :destroy
+
   # validates :title,  presence: true
   # validates is rails method
   # validates(:title, { presence: true })

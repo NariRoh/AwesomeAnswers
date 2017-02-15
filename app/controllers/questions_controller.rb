@@ -59,6 +59,7 @@ class QuestionsController < ApplicationController
   end
 
   def show
+    @answer = Answer.new
     # render json: params
     # find throw exeption(404 page) if id is not found and we want this!
     # find_by_id will return nil

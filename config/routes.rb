@@ -15,9 +15,6 @@ Rails.application.routes.draw do
 
   get '/about' => 'welcome#about_us', as: :aboutus
 
-  # resources :questions, only: [:create, :update]
-  # resources :questions, except: [:index]
-  resources :questions
   # as helper only cares about generating URL not HTTP verbs
   # get    '/questions/new'      => 'questions#new', as: :new_question
   # post   '/questions'          => 'questions#create', as: :questions
@@ -27,4 +24,29 @@ Rails.application.routes.draw do
   # get    '/questions/:id/edit' => 'questions#edit', as: :edit_question
   # patch  '/questions/:id'      => 'questions#update'
   # delete '/questions/:id'     => 'questions#destroy'
+
+  # resources :questions, only: [:create, :update]
+  # resources :questions, except: [:index]
+  # For answers associated with questions
+  # post '/questions/:question_id/answers' => 'answers#create'
+  # delete '/questions/:question_id/answers/:id' => 'answers#destroy'
+
+  # post '/questions/search' => 'questions#search'
+  # shallow: true option makes it so nested routes only include '/questions/:question_id'
+  # for the create action and not for `destroy` for instance. This is because
+  # when deleting a nested resouces you may not need to know about the parent
+  # resource because you can get it from the Database. In our case, we can
+  # get the question_id of an answer from the database
+  resources :questions, shallow: true do
+    # post :search # /questions/:question_id/search(.:format) looks like answers
+    # post :search, on: :member # /questions/:id/search(.:format) looks like edit
+    # post :search, on: :collection # /questions/search(.:format)
+    
+    # this creates a set of `answers` routes nested within the `questions`
+    # routes. This will make all the `answers` routes prefixed with
+    # `/questions/:question_id`
+    resources :answers, only: [:create, :destroy]
+  end
+
+
 end

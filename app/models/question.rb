@@ -16,7 +16,8 @@ class Question < ApplicationRecord
   #          question
   # nullify: which will update all the `question_id` fields on the associated
   #          answers to be come `NULL` before deleting the question
-  has_many :answers, dependent: :destroy
+  # has_many :answers, -> { order(created_at: :desc) }, dependent: :destroy
+  has_many :answers, lambda { order(created_at: :desc) }, dependent: :destroy
 
   # validates :title,  presence: true
   # validates is rails method

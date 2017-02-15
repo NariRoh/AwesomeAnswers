@@ -4,4 +4,6 @@ class Answer < ApplicationRecord
     # a = Answer.last
     # q = a.question
   belongs_to :question
+
+  validates :body, presence: true, length: { minimum: 4 }
 end

@@ -4,3 +4,31 @@
 <%= link_to 'Delete', question_path(@question),
                       method: :delete,
                       data: { confirm: 'Are you sure?' } %>
+<hr>
+<h2>Answers</h2>
+<h3>Create New Answer</h3>
+<%#= form_for @answer, url: question_answers_path(@question) do |f| %>
+<%# passing an array like this: [@question, @answer] to `form_for` will help us
+    generate nested routes for our form. In this case `@question` must be a
+    persisted record in the database. @answer can be either persisted or not.
+    If it's not persisted, the URL generated will be:
+     question_answers_path(@question). If it's persisted then the URL will be:
+     question_answer_path(@question, @answer) %>
+<%= @answer.errors.full_messages.join(', ') %>
+<%= form_for [@question, @answer] do |f| %>
+  <%= f.text_area :body %>
+  <%= f.submit %>
+<% end %>
+
+<hr>
+<% @question.answers.each do |ans| %>
+  <%= ans.body %>
+  <%#= without shallow option %>
+  <%#= link_to 'delete', question_answer_path(@question, ans) ,
+                        method: :delete,
+                        data: { confirm: 'Are you sure? '} %>
+  <%= link_to 'delete', answer_path(ans),
+                        method: :delete,
+                        data: { confirm: 'Are you sure?'} %>
+  <hr>
+<% end %>

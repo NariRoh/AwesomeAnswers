@@ -2,7 +2,20 @@ Rails.application.routes.draw do
   # you map a HTTP verb / URL combo to a controller + action (method)
 
   # get({ '/' => 'welcome#index'})
-  get '/' => 'welcome#index'
+  # get '/' => 'welcome#index'
+  root 'welcome#index'
+
+  # dashboard_index_path	GET	/dashboard(.:format) admin/dashboard#index
+  # resources :dashboard, only: [:index], controller: 'admin/dashboard'
+  
+  # this will make the url structure follow the folder structure of the
+  # controllers inside. For instance, the code below will generate a url that
+  # looks like `/admin/dashboard` that will map to `admin/dashboard` controller
+  # admin_dashboard_index_path	GET	/admin/dashboard(.:format) admin/dashboard#index
+  namespace :admin do
+    resources :dashboard, only: [:index]
+  end
+
   # the above route maps any 'GET' request with '/' URL to the index action
   # within the WelcomeController (action is a method defined within the
   # controller class)
@@ -41,11 +54,18 @@ Rails.application.routes.draw do
     # post :search # /questions/:question_id/search(.:format) looks like answers
     # post :search, on: :member # /questions/:id/search(.:format) looks like edit
     # post :search, on: :collection # /questions/search(.:format)
-    
+
     # this creates a set of `answers` routes nested within the `questions`
     # routes. This will make all the `answers` routes prefixed with
     # `/questions/:question_id`
     resources :answers, only: [:create, :destroy]
+  end
+
+  resources :users, only: [:new, :create]
+  # resources :sessions, only: [:new, :create, :destroy]
+  # since you don't need :id /sessions/:id for destroy action,
+  resources :sessions, only: [:new, :create] do
+    delete :destroy, on: :collection
   end
 
 

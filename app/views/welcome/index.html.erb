@@ -1,3 +1,9 @@
 <h1>Awesome Answers</h1>
 
 <%= link_to 'New Question', new_question_path %>
+<div>
+  <%#= with '/filename.jpg' will always look for public folder %>
+  <%#= image_tag '/turtle.jpg' %>
+  <%= image_tag 'turtle.jpg' %>
+  <%#= asset_path 'turtle.jpg' %>   
+</div>

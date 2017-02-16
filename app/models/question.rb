@@ -18,6 +18,7 @@ class Question < ApplicationRecord
   #          answers to be come `NULL` before deleting the question
   # has_many :answers, -> { order(created_at: :desc) }, dependent: :destroy
   has_many :answers, lambda { order(created_at: :desc) }, dependent: :destroy
+  belongs_to :user
 
   # validates :title,  presence: true
   # validates is rails method

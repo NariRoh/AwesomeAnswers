@@ -1,4 +1,6 @@
 class QuestionsController < ApplicationController
+  # order of before_action matters!
+  before_action :authenticate_user!, except: [:show, :index]
   # this will execute the method `find_question` before it executes the action
   # if you give it `only` or `except` options then it will only include or only
   # exclude certain actions
@@ -10,6 +12,7 @@ class QuestionsController < ApplicationController
   # using string for method name here 🖕 instead of symbol: when you care about
   # value and you will change the method?
   before_action :find_question, only: [:show, :edit, :destroy, :update]
+  before_action :authorize, only: [:edit, :update, :destroy]
 
   def new
     # by default this will render app/views/questions/new.html.erb
@@ -32,6 +35,7 @@ class QuestionsController < ApplicationController
 
 
     @question  = Question.new(question_params)
+    @question.user = current_user
     if @question.save
       # render plain: 'success'
       # render :show # this will show the page but URL is wrong /questions not
@@ -110,6 +114,22 @@ class QuestionsController < ApplicationController
 
   def find_question
     @question = Question.find params[:id]
+  end
+
+  def authorize
+    # if session[:user_id] != @question.user_id
+    # if current_user != @question.user_id // without cancancan
+
+    # `can?` and `cannot?` are helper methods that are available in controllers
+    # and views that came from the `cancancan` gem and it will check in the
+    # `ability.rb` file for a matching rule.
+    # can? is a helper method that is available in controllers and views that
+    #  came from the `cancancan` gem and it will check in the `ability.rb` file
+    # for a matching rule.
+    # unless can?(:manage, @question)
+    if cannot?(:manage, @question)
+      redirect_to root_path, alert: 'Not authorized!'
+    end
   end
 
 end

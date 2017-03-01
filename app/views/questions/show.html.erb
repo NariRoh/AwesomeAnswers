@@ -1,5 +1,26 @@
 <h1><%= @question.title %></h1>
 <p><%= @question.body %></p>
+
+<%# like = @question.likes.find_by(user: current_user) %>
+
+<% if user_signed_in? && can?(:like, @question) %>
+  <%# if like.present? %>
+  <% if @question.liked_by?(current_user) %>
+    <%#= link_to "Un-Like", like_path(like), method: :delete %>
+    <%= link_to "Un-Like",
+        like_path(@question.like_for(current_user)),
+        method: :delete %>
+  <% else %>
+    <%= link_to "Like", question_likes_path(@question), method: :post %>
+  <% end %>
+<% end %>
+
+<%#= pluralize is a helper method that takes a number as first argument and a word
+as a second argument. It will pluralize the word based on the quantity represented
+by the first argument. Finally, it will return them joined together
+(e.g. pluralize(6, 'dog') # returns 6 dogs ) %>
+(<%= pluralize @question.likes.count, 'like' %> )
+
 <%#= 👇 this will throw exception when the user log out and goes to the show page  %>
 <%# if @question.user_id == current_user.id %>
 <%# if user_signed_in? && @question.user_id == current_user.id %>

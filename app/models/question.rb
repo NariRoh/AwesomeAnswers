@@ -19,6 +19,18 @@ class Question < ApplicationRecord
   # has_many :answers, -> { order(created_at: :desc) }, dependent: :destroy
   has_many :answers, lambda { order(created_at: :desc) }, dependent: :destroy
   belongs_to :user
+  
+  has_many :likes, dependent: :destroy # 👈 q.likes
+  # 👇 will create an instance method named liking_users that will get all users that
+  # liked the question
+  # through - this argument defines which model is used for the join (i.e. the table that
+  # has a reference to the user and the question)
+  # source - this argument defines what is the target reference from the like model
+  has_many :liking_users, through: :likes, source: :user
+
+  # q.liking_users
+  # q.liking_users << User.last : insert last user into the the liking users list
+  # of the question
 
   # validates :title,  presence: true
   # validates is rails method
@@ -46,6 +58,17 @@ class Question < ApplicationRecord
   # the following is a callback that will run the method set_view_count
   # before any validation is run on the model
   after_initialize(:set_view_count)
+
+  def liked_by?(user)
+    # exists? returns true if the query in the argument returns something
+    # it reutrns true if there is a like with the user reference `user`
+    likes.exists?(user: user)
+  end
+
+  def like_for(user)
+    likes.find_by(user: user)
+  end
+
 
   # define a class method by adding self. in front of a method name
   # This method will be calleable on the class itself (i.e. Question.search("thing"))

@@ -52,6 +52,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.12.2)
+    colorize (0.8.1)
     concurrent-ruby (1.0.4)
     cowsay (0.3.0)
     debug_inspector (0.0.2)
@@ -175,6 +176,7 @@ DEPENDENCIES
   byebug
   cancancan
   coffee-rails (~> 4.2)
+  colorize
   cowsay (~> 0.3.0)
   hirb
   interactive_editor

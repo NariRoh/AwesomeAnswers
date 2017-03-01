@@ -17,6 +17,12 @@ class User < ApplicationRecord
 
   has_many :questions, dependent: :nullify
 
+  has_many :likes, dependent: :destroy # 👈 this line allows to do u.likes
+  has_many :liked_questions, through: :likes, source: :question
+  # 👆 this is a method(name it anything you want) to grab all liked questions by
+  # the users // create query  # u.likes.map {|l| l.question }
+  # source is what you're trying to get 
+
   # before_save // happens for create and update
   before_validation :downcase_email
 

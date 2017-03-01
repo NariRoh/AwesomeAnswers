@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 
   # dashboard_index_path	GET	/dashboard(.:format) admin/dashboard#index
   # resources :dashboard, only: [:index], controller: 'admin/dashboard'
-  
+
   # this will make the url structure follow the folder structure of the
   # controllers inside. For instance, the code below will generate a url that
   # looks like `/admin/dashboard` that will map to `admin/dashboard` controller
@@ -51,6 +51,9 @@ Rails.application.routes.draw do
   # resource because you can get it from the Database. In our case, we can
   # get the question_id of an answer from the database
   resources :questions, shallow: true do
+    # We set up routes to be nested under the questions resources as we will need the question id to associate with. We don't have to worry about the user id because we can get that from the session.
+    resources :likes, only: [:create, :destroy]
+
     # post :search # /questions/:question_id/search(.:format) looks like answers
     # post :search, on: :member # /questions/:id/search(.:format) looks like edit
     # post :search, on: :collection # /questions/search(.:format)
@@ -61,12 +64,22 @@ Rails.application.routes.draw do
     resources :answers, only: [:create, :destroy]
   end
 
-  resources :users, only: [:new, :create]
+  resources :users, only: [:new, :create] do
+    resources :likes, only: [:index]
+  end
   # resources :sessions, only: [:new, :create, :destroy]
   # since you don't need :id /sessions/:id for destroy action,
   resources :sessions, only: [:new, :create] do
+    # below line generate /sessions
     delete :destroy, on: :collection
   end
+
+  # resources :photos do
+  #   member do
+  #     get 'preview'
+  #   end
+  # end
+  # /photos/:id/preview(.:format)
 
 
 end

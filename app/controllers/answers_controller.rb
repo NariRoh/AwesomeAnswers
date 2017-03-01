@@ -1,11 +1,12 @@
 class AnswersController < ApplicationController
   def create
-    # render json: params
+    render json: params
     answer_params    = params.require(:answer).permit(:body)
     @answer          = Answer.new answer_params
     # @answer.question = Question.find params[:question_id]
     @question = Question.find params[:question_id]
     @answer.question = @question
+    
     if @answer.save
       redirect_to question_path(params[:question_id]), notice: 'answer created!'
     else

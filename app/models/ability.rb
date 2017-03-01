@@ -11,7 +11,7 @@ class Ability
     # this will insantiate the `user` variable to a new `User` object if it's
     # nil or undefined
     user ||= User.new
-    
+
     # this gives super powers to the admin. The admin here can do anything
     if user.is_admin?
       can :manage, :all
@@ -29,6 +29,16 @@ class Ability
       # `manage` in this case
       q.user == user # <- currently signed user
       # even if user is not signed in 🖕 this user is User.new not nil
+    end
+
+    # cannot only defines the ability for the cannot?() method
+    cannot :like, Question do |q|
+      user == q.user
+    end
+
+    # can defines the ability for the can?() method 
+    can :like, Question do |q|
+      user != q.user
     end
 
     # Define abilities for the passed in user here. For example:

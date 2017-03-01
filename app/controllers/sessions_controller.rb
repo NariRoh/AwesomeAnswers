@@ -6,6 +6,7 @@ class SessionsController < ApplicationController
   def create
     # render json: params
     user = User.find_by_email params[:email]
+    # user.authenticate(params[:password]) returns that user object
     # user && user.authenticate(params[:password])
     if user&.authenticate(params[:password])
       session[:user_id] = user.id

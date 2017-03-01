@@ -21,6 +21,7 @@ class QuestionsController < ApplicationController
   end
 
   def create
+    # byebug
     # render json: params
     # render json: params[:question]
     # Question.create(params[:question])

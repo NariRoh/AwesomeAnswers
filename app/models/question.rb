@@ -1,4 +1,9 @@
 class Question < ApplicationRecord
+  # creates a plan old attribute which will not be persisted in the db
+  # we're adding this to allow having a form field of the same name
+  # with form_for or simple_form
+  attr_accessor :tweet_this
+
   extend FriendlyId
 
   mount_uploader :image, ImageUploader

@@ -43,6 +43,10 @@ class User < ApplicationRecord
     "#{first_name} #{last_name}".strip.titleize
   end
 
+  def signed_in_with_twitter?
+    uid.present? && provider == 'twitter'
+  end
+
   def from_oauth?
     uid.present? && provider.present?
   end

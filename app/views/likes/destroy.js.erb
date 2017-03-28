@@ -1,0 +1,5 @@
+<% if @destroy_outcome %>
+  $('#like').html("<%= j render 'like' %>");
+<% else %>
+  alert('can\'t remove like, please refresh and try again');
+<% end %>

@@ -38,6 +38,21 @@ class QuestionsController < ApplicationController
     @question  = Question.new(question_params)
     @question.user = current_user
     if @question.save
+
+      if @question.tweet_this
+        # Adding :: in front of a constant garantees that you are
+        # getting the version of the constant from the global namespace
+        # (e.g. 👇 Twitter below was being detected as part of a module
+        # name after this controller, QuestionsController, by using ::
+        # in front of we were able to get Twitter constant from the gem)
+        client = ::Twitter::REST::Client.new do |c|
+          c.consumer_key = ENV['TWITTER_API_KEY']
+          c.consumer_secret = ENV['TWITTER_API_SECRET']
+          c.access_token = current_user.oauth_token
+          c.access_token_secret = current_user.oauth_secret
+        end
+        client.update @question.title
+      end
       # render plain: 'success'
       # render :show # this will show the page but URL is wrong /questions not
       # /questions/id. So, instead of sending 200, Rails App sends 302(redirect)
@@ -133,7 +148,7 @@ class QuestionsController < ApplicationController
 
     # { tag_ids: [] } will tell Rails to accept and array of value for `tag_ids`
     # instead of a single value
-    params.require(:question).permit([:title, :body, :image, { tag_ids: [] }])
+    params.require(:question).permit([:title, :body, :image, :tweet_this, { tag_ids: [] }])
   end
 
   def find_question

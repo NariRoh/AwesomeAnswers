@@ -66,7 +66,9 @@ gem 'activeadmin', '1.0.0.pre5'
 gem 'devise'
 
 gem 'omniauth-twitter'
-
+gem 'twitter'
+gem 'pry'
+gem 'pry-rails'
 
 group :development, :test do
   gem 'letter_opener'

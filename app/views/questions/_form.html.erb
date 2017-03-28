@@ -29,6 +29,14 @@
     a field that is used to upload a file then simple_form will use a
     file field for it and it will set the correct enctype for the form %>
   <%= f.input :image %>
+
+  <% if !@question.persisted? && current_user.signed_in_with_twitter? %>
+    <div>
+      <%= f.check_box :tweet_this %>
+      <%= f.label :tweet_this %>
+    </div>
+  <% end %>
+
   <%= f.submit class: 'btn btn-primary' %>
   <!-- <div> -->
     <%#= f.label :title %>

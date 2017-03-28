@@ -26,15 +26,20 @@
       <span>Hello <%= current_user.full_name %>, </span>
       <%= link_to 'Sign Out', sessions_path, method: :delete %>
     <% else %>
+      |
       <span>You're not signed in</span>
+      |
       <%= link_to 'Sign Up', new_user_path %>
+      |
       <%= link_to 'Sign In', new_session_path %>
+      |
+      <%= link_to 'Sign in with Twitter', sign_in_with_twitter_path %>
     <% end %>
     <hr>
 
     <%= notice || alert %>
     <div class="container">
-      <%= yield %>       
+      <%= yield %>
     </div>
   </body>
 </html>

@@ -5,6 +5,13 @@ Rails.application.routes.draw do
   # get '/' => 'welcome#index'
   root 'welcome#index'
 
+  # this is a route required by omnuauth-twitter
+  # it sends the user to a virtual controller created by the
+  # omniauth-twitter gem which will redirect the user the twitter
+  # authorization server
+  get '/auth/twitter', as: :sign_in_with_twitter
+  get '/auth/:provider/callback' => 'callbacks#index'
+
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
         resources :questions, only: [:show, :index, :create]

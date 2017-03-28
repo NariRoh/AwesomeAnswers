@@ -26,6 +26,8 @@ class User < ApplicationRecord
   has_many :votes, dependent: :destroy
   has_many :voted_questions, through: :votes, source: :question
 
+  serialize :oauth_raw_data
+
   # before_save // happens for create and update
   before_validation :downcase_email
 
@@ -34,10 +36,36 @@ class User < ApplicationRecord
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
   validates :email, presence: true,
                     uniqueness: true,
-                    format: VALID_EMAIL_REGEX
+                    format: VALID_EMAIL_REGEX,
+                    unless: :from_oauth?
 
   def full_name
     "#{first_name} #{last_name}".strip.titleize
+  end
+
+  def from_oauth?
+    uid.present? && provider.present?
+  end
+
+  def self.find_from_oauth(omniauth_data)
+    User.where(
+      uid: oauth_data['uid'],
+      provider: oauth_data['provider']
+    ).first
+  end
+
+  def self.create_from_omniauth(omniauth_data)
+    full_name = omniauth_data['info']['name'].split
+    User.create(
+      uid: omniauth_data['uid'],
+      provider: omniauth_data['provider'],
+      first_name: full_name[0],
+      last_name: full_name[1],
+      oauth_token: omniauth_data['credentials']['token'],
+      oauth_secret: omniauth_data['credentials']['secret'],
+      oauth_raw_data: omniauth_data,
+      password: SecureRandom.hex(16)
+    )
   end
 
   private

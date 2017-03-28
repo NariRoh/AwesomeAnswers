@@ -65,7 +65,8 @@ gem 'inherited_resources', '~> 1.7'
 gem 'activeadmin', '1.0.0.pre5'
 gem 'devise'
 
-gem ''
+gem 'omniauth-twitter'
+
 
 group :development, :test do
   gem 'letter_opener'

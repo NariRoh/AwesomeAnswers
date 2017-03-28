@@ -68,6 +68,20 @@ class QuestionsController < ApplicationController
     # render json: params
     # find throw exeption(404 page) if id is not found and we want this!
     # find_by_id will return nil
+    @vote = @question.vote_for(current_user)
+    # respond_to enables us to send different responses depending on the format
+    # of the request
+    respond_to do |format|
+      # `html` is the default format. Render will just render `show.html.erb`
+      format.html { render }
+      # this will render `show.json.erb`
+      # format.json { render }
+
+      # with every ActiveRecord object we have a `to_json` method that returns
+      # a JSON object with attributes of every single attribute in the
+      # ActiveRecord object
+      format.json { render json: @question.to_json }
+    end
   end
 
   def index
@@ -78,6 +92,10 @@ class QuestionsController < ApplicationController
   end
 
   def update
+    # by default friendly_id won't update the slug of question, so one way to
+    # force friendly_id to update the slug is by setting the slug to `nil`
+    # before updating the question
+    @question.slug = nil # force to regenerate new slug
     if @question.update question_params
       redirect_to question_path(@question), notice: 'Question updated!'
                                             # 🖕 this only works for redirect_to
@@ -110,7 +128,12 @@ class QuestionsController < ApplicationController
     # this feature is called strong parameters which you only permit title and
     # body inputs from user
     # question_params = params.require(:question).permit([:title, :body])
-    question_params = params.require(:question).permit(:title, :body)
+    # question_params = params.require(:question).permit(:title, :body)
+    # this feature is called strong parameters (introduced in Rails 4+)
+
+    # { tag_ids: [] } will tell Rails to accept and array of value for `tag_ids`
+    # instead of a single value
+    params.require(:question).permit([:title, :body, :image, { tag_ids: [] }])
   end
 
   def find_question

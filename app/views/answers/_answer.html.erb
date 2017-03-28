@@ -1,0 +1,17 @@
+<!-- <div id="<%= ans.id %>"> -->
+<%# dom_id is a rails help that generates a string that is useful to be used
+    as `id` attributes in the DOM. It will put the resource(model) name before
+    the database id of the record. So in our case if the Answer record has an
+    an id of 112 then dom_id(answer) will generate `answer_112` %>
+<div id="<%= dom_id(ans) %>" style="<%= style if defined?(style) %>">
+  <%= ans.body %>
+  <%#= without shallow option %>
+  <%#= link_to 'delete', question_answer_path(@question, ans) ,
+  method: :delete,
+  data: { confirm: 'Are you sure? '} %>
+  <%= link_to 'delete', answer_path(ans),
+                        method: :delete,
+                        remote: true,
+                        data: { confirm: 'Are you sure?'} %>
+  <hr>
+</div>

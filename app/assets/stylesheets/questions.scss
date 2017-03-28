@@ -1,3 +1,40 @@
-.field_with_errors input {
-  border-color: red;
+// .field_with_errors input {
+//   border-color: red;
+// }
+
+@import 'variables';
+
+// .form .field_with_errors input {
+//   border-color: $main-color;
+// }
+//
+// .form .field_with_errors textarea {
+//   border-radius: 5px;
+// }
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+     -moz-border-radius: $radius;
+      -ms-border-radius: $radius;
+          border-radius: $radius;
+}
+
+
+.form {
+  .field_with_errors {
+    textarea {
+      border-radius: 5px;
+      @include border-radius(5px);
+    }
+    input {
+      @include border-radius(10px);
+      border-color: $main-color;
+    }
+  }
+}
+
+
+.abc {
+  background-color: $main-color;
+  border-color: darken($main-color, 20%);
 }

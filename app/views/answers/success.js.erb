@@ -1,0 +1,12 @@
+// alert('inside success.js.erb');
+// $('#answers').prepend('<%= render 'answer', ans: @answer %>')
+$('#answers').prepend('<%= j render 'answer', ans: @answer, style: 'display:none' %>');
+$('#<%= dom_id(@answer) %>').slideDown();
+// $('#answer_body').val('');
+<%# we need to re-instantiate @answer in here because @answer is persisted which
+    mean that the form will attempt to submit to the `update` action which has
+    a url of `question_answer_path` (we don't want that) we want the form to
+    just submit to create action again which we can do by re-instantiating
+    `@answer` to a new `Answer` %>
+<% @answer = Answer.new %>
+$('#new_answer').replaceWith("<%= j render 'form' %>");

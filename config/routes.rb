@@ -1,10 +1,15 @@
 Rails.application.routes.draw do
   # you map a HTTP verb / URL combo to a controller + action (method)
-
+  match "/delayed_job" => DelayedJobWeb, :anchor => false, via: [:get, :post]
   # get({ '/' => 'welcome#index'})
   # get '/' => 'welcome#index'
   root 'welcome#index'
 
+  namespace :api, defaults: { format: :json } do
+    namespace :v1 do
+        resources :questions, only: [:show, :index, :create]
+    end
+  end
   # dashboard_index_path	GET	/dashboard(.:format) admin/dashboard#index
   # resources :dashboard, only: [:index], controller: 'admin/dashboard'
 
@@ -13,7 +18,7 @@ Rails.application.routes.draw do
   # looks like `/admin/dashboard` that will map to `admin/dashboard` controller
   # admin_dashboard_index_path	GET	/admin/dashboard(.:format) admin/dashboard#index
   namespace :admin do
-    resources :dashboard, only: [:index]
+    resources :dashboard, only: :index
   end
 
   # the above route maps any 'GET' request with '/' URL to the index action
@@ -62,6 +67,7 @@ Rails.application.routes.draw do
     # routes. This will make all the `answers` routes prefixed with
     # `/questions/:question_id`
     resources :answers, only: [:create, :destroy]
+    resources :votes, only: [:create, :destroy, :update]
   end
 
   resources :users, only: [:new, :create] do

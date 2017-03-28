@@ -3,23 +3,54 @@
 
 <%# like = @question.likes.find_by(user: current_user) %>
 
-<% if user_signed_in? && can?(:like, @question) %>
+<!-- <% if user_signed_in? && can?(:like, @question) %>
   <%# if like.present? %>
   <% if @question.liked_by?(current_user) %>
     <%#= link_to "Un-Like", like_path(like), method: :delete %>
-    <%= link_to "Un-Like",
-        like_path(@question.like_for(current_user)),
-        method: :delete %>
+    <%= link_to "Un-Like", like_path(@question.like_for(current_user)),
+                           method: :delete,
+                           remote: true %>
   <% else %>
-    <%= link_to "Like", question_likes_path(@question), method: :post %>
+    <%= link_to "Like", question_likes_path(@question),
+                        method: :post,
+                        remote: true %>
   <% end %>
-<% end %>
-
+<% end %> -->
 <%#= pluralize is a helper method that takes a number as first argument and a word
 as a second argument. It will pluralize the word based on the quantity represented
 by the first argument. Finally, it will return them joined together
 (e.g. pluralize(6, 'dog') # returns 6 dogs ) %>
-(<%= pluralize @question.likes.count, 'like' %> )
+<!-- (<%= pluralize @question.likes.count, 'like' %> ) -->
+
+<div id="like">
+  <%= render 'likes/like' %>
+</div>
+
+<%= image_tag @question.image.url if @question.image.present? %>
+
+
+<%# if !@question.voted_by?(current_user) %>
+<%# vote = @question.vote_for(current_user) %>
+<% if @vote.nil? %>
+<%# if current_vote.nil? %>
+  <%= link_to 'Vote Up', question_votes_path(@question, { is_up: true }),
+                         method: :post %>
+
+  <%= link_to 'Vote Down', question_votes_path(@question, { is_up: false }),
+                           method: :post %>
+<% elsif @vote.is_up? %>
+  <%= link_to 'Un-do Vote Up', vote_path(@vote), method: :delete %>
+  <%= link_to 'Vote Down', vote_path(@vote, { is_up: false}), method: :patch %>
+<% else %>
+  <%= link_to 'Vote Up', vote_path(@vote, { is_up: true }), method: :patch %>
+  <%= link_to 'Un-do Vote Down', vote_path(@vote), method: :delete %>
+  <!-- you voted already! -->
+<% end %>
+
+(<%= @question.votes_total %>)
+
+<%#= button_to 'Vote Up', question_votes_path(@question,
+{ is_up: true }) %>
 
 <%#= 👇 this will throw exception when the user log out and goes to the show page  %>
 <%# if @question.user_id == current_user.id %>
@@ -41,21 +72,34 @@ by the first argument. Finally, it will return them joined together
     If it's not persisted, the URL generated will be:
      question_answers_path(@question). If it's persisted then the URL will be:
      question_answer_path(@question, @answer) %>
-<%= @answer.errors.full_messages.join(', ') %>
-<%= form_for [@question, @answer] do |f| %>
-  <%= f.text_area :body %>
-  <%= f.submit %>
-<% end %>
+<%#= @answer.errors.full_messages.join(', ') %>
+<%#= form_for [@question, @answer] do |f| %>
+  <%#= f.text_area :body %>
+  <%#= f.submit %>
+<%# end %>
+
+<!-- <%= simple_form_for [@question, @answer], remote: true do |f| %>
+  <%= f.input :body, label: false, hint: 'at least 5 characters' %>
+  <%= f.submit class: 'btn btn-primary' %>
+<% end %> -->
+<%= render 'answers/form' %>
 
 <hr>
-<% @question.answers.each do |ans| %>
-  <%= ans.body %>
+<div id="answers">
+  <% @question.answers.each do |ans| %>
+  <!-- <%= ans.body %>
   <%#= without shallow option %>
   <%#= link_to 'delete', question_answer_path(@question, ans) ,
-                        method: :delete,
-                        data: { confirm: 'Are you sure? '} %>
+  method: :delete,
+  data: { confirm: 'Are you sure? '} %>
   <%= link_to 'delete', answer_path(ans),
-                        method: :delete,
-                        data: { confirm: 'Are you sure?'} %>
-  <hr>
-<% end %>
+  method: :delete,
+  data: { confirm: 'Are you sure?'} %>
+  <hr> -->
+
+  <% render 'answers/answer', ans: ans %>
+  <%# you can also do the line below if you use the variable `answer` for the
+  answer name within /answers/_answer.html.erb template. %>
+  <%#= render @question.answers %>
+  <% end %>
+</div>

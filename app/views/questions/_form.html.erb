@@ -19,16 +19,38 @@
 <%# { title: "what is 0.2 + 0.1", body: "hard question" } this looks the same as
     q = Question.create({ title: "what is 0.2 + 0.1", body: "hard question" })%>
 <p><%= @question.errors.full_messages.join(', ') %></p>
-<%= form_for @question do |f| %>
-  <div>
-    <%= f.label :title %>
-    <%= f.text_field :title %>
-  </div>
-  <div>
-    <%= f.label :body %>
-    <%= f.text_field :body %>
-  </div>
-  <%= f.submit %>
+<%= simple_form_for @question do |f| %>
+  <%# simple form guesses the type of the field based on the type of database
+  column. :varchar => text_field, :text => text_area %>
+  <%= f.input :title %>
+  <%= f.input :body %>
+  <%= f.association :tags, input_html: { class: 'chosen-select form-control' } %>
+  <%# simple_form integrates nicely with CarrierWave so when using f.input for
+    a field that is used to upload a file then simple_form will use a
+    file field for it and it will set the correct enctype for the form %>
+  <%= f.input :image %>
+  <%= f.submit class: 'btn btn-primary' %>
+  <!-- <div> -->
+    <%#= f.label :title %>
+    <%#= f.text_field :title %>
+  <!-- </div> -->
+  <!-- <div> -->
+    <%#= f.label :body %>
+    <%#= f.text_field :body %>
+  <!-- </div> -->
+  <!-- <div> -->
+    <%#= f.label :tag_ids %>
+    <%#= f.collection_check_boxes :tag_ids, Tag.all, :id, :name do |b| %>
+    <%#= f.collection_select :tag_ids, Tag.all, :id, :name,
+                            {},
+                            { multiple: true, class: 'chosen-select' } do |b| %>
+      <!-- <div class='tag-wrapper'> -->
+        <%#= b.check_box %>
+        <%#= b.text %>
+      <!-- </div> -->
+    <%# end %>
+  <!-- </div> -->
+  <%#= f.submit %>
 <% end %>
 
 <%#

@@ -2,5 +2,6 @@
 
 <% @question.each do |q| %>
   <%#= link_to q.title, question_path(q) %>
-  <%= link_to q.title, q %>   
+  <%= image_tag q.image.url(:thumb) if q.image.present? %>
+  <%= link_to q.title, q %>
 <% end %>

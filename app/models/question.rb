@@ -1,4 +1,15 @@
 class Question < ApplicationRecord
+  extend FriendlyId
+
+  mount_uploader :image, ImageUploader
+  # the :history option will keep a history for the slugs in a the
+  # friendly_id_slugs table which support slugs that were used before for the
+  # model
+  # the :finders option will make so that Question.find will work if you give it
+  # a slug instead of an id (otherwise, you would have to use
+  # Question.friendly.find)
+  friendly_id :title, use: [:slugged, :history, :finders]
+  # Question.find_each(&:save) #Question.all.each {|q| q.save }
 
   # this sets up one-to-many association between the question and the answer
   # in this case a question has many answers (note that to set a one-to-many
@@ -18,8 +29,8 @@ class Question < ApplicationRecord
   #          answers to be come `NULL` before deleting the question
   # has_many :answers, -> { order(created_at: :desc) }, dependent: :destroy
   has_many :answers, lambda { order(created_at: :desc) }, dependent: :destroy
-  belongs_to :user
-  
+  belongs_to :user, optional: true
+
   has_many :likes, dependent: :destroy # 👈 q.likes
   # 👇 will create an instance method named liking_users that will get all users that
   # liked the question
@@ -28,7 +39,13 @@ class Question < ApplicationRecord
   # source - this argument defines what is the target reference from the like model
   has_many :liking_users, through: :likes, source: :user
 
+  has_many :votes, dependent: :destroy
+  has_many :voters, through: :votes, source: :user
+
+  has_many :taggings, dependent: :destroy
+  has_many :tags, through: :taggings
   # q.liking_users
+
   # q.liking_users << User.last : insert last user into the the liking users list
   # of the question
 
@@ -39,7 +56,7 @@ class Question < ApplicationRecord
   # validates :title, { presence: { message: 'must be given!' } }
   validates(:title, { presence: { message: 'must be given!' },
                       uniqueness: true })
-  validates :body, presence: true, length: { minimum: 3 }
+  validates :body, presence: true, length: { minimum: 5 }
   validates :view_count, presence: true,
                          numericality: { greter_than_or_equal_to: 0 }
 
@@ -67,8 +84,24 @@ class Question < ApplicationRecord
 
   def like_for(user)
     likes.find_by(user: user)
+    # likes.find_by_user_id user.id
   end
 
+  # by using <% if vote.nil? %>
+  # def voted_by?(user)
+  #   votes.exists?(user: user)
+  #   # self.votes.existe?(user: user)
+  # end
+
+  def vote_for(user)
+    votes.find_by(user: user)
+    # find_by returns only one data
+  end
+
+  def votes_total
+    # votes.where(is_up: true).count - votes.where(is_up: false).count
+    votes.up.count - votes.down.count
+  end
 
   # define a class method by adding self. in front of a method name
   # This method will be calleable on the class itself (i.e. Question.search("thing"))
@@ -81,6 +114,11 @@ class Question < ApplicationRecord
 # 🖕 class method and when self used inside method like 👇 self refers
 # instance of the class (the object you create!)
 # methods under private area can be only called inside class
+
+  # def to_param
+  #   # id is default in show page /questions/10 #{question.to_param} rails does this
+  #   "#{id}-#{title}".parameterize
+  # end
 
   private
 

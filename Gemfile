@@ -37,11 +37,38 @@ gem 'jbuilder', '~> 2.5'
 gem 'bcrypt', '~> 3.1.7'
 
 gem 'cancancan'
+# https://github.com/rails-api/active_model_serializers
+gem 'active_model_serializers'
+
+gem 'delayed_job_active_record'
+gem "delayed_job_web"
+gem 'sinatra', '2.0.0.beta2'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 gem 'colorize'
+gem 'faker'
+gem 'chosen-rails'
+
+gem 'rack-cors', require: 'rack/cors'
+
+gem 'friendly_id'
+
+gem 'simple_form'
+
+gem 'bootstrap-sass', '~> 3.3.6'
+
+gem 'carrierwave'
+gem 'mini_magick'
+gem 'fog'
+
+gem 'inherited_resources', '~> 1.7'
+gem 'activeadmin', '1.0.0.pre5'
+gem 'devise'
+
+gem ''
 
 group :development, :test do
+  gem 'letter_opener'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
 end

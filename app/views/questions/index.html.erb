@@ -2,6 +2,7 @@
 
 <%# @questions is an array %>
 <% @questions.each do |q| %>
+  <%= image_tag q.image.url(:thumb) if q.image.present? %>
   <%= link_to q.title, question_path(q) %>
   <hr>
 <% end %>

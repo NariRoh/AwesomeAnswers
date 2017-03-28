@@ -1,0 +1,5 @@
+<% if @like.errors.any? %>
+  alert('can\'t like. Please refresh page');
+<% else %>
+  $('#like').html("<%= j render 'like' %>");
+<% end %>

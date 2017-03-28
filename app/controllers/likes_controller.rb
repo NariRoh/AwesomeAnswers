@@ -1,8 +1,8 @@
 class LikesController < ApplicationController
   before_action :authenticate_user!
-  before_action :find_like, only: [:destroy]
-  before_action :find_question, only: [:create]
-  before_action :authorize, except: [:index]
+  before_action :find_like, only: :destroy
+  before_action :find_question, only: :create
+  before_action :authorize, except: :index
 
   def index
     # render json: params
@@ -13,7 +13,7 @@ class LikesController < ApplicationController
 
   def create
     # render json: params ==> question_id
-    # if cannot? :like, @question
+    if cannot? :like, @question
     #   redirect_to question_path(@question), alert: 'Liking your own Question isn\'t allowed'
     #   # redirect_to and render does not prevent the rest of method from executing
     #   # calling redirect_to and/or render twice or more in an action will cause
@@ -23,13 +23,19 @@ class LikesController < ApplicationController
     #   return
     # end
 
-    like = Like.new user: current_user, question: @question
+    @like = Like.new user: current_user, question: @question
 
 
-    if like.save
-      redirect_to question_path(@question), notice: 'Question liked! 💖'
+    if @like.save
+      respond_to do |format|
+        format.html { redirect_to question_path(@question), notice: 'Question liked! 💖' }
+        format.js   { render }
+      end
     else
-      redirect_to question_path(@question), alert: 'Couldn\'t like question!'
+      respond_to do |format|
+        format.html { redirect_to question_path(@question), alert: 'Couldn\'t like question!' }
+        format.js   { render }
+      end
     end
 
   end
